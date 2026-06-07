@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: urbot-backend
+    runtime: docker
+    dockerContext: backend
+    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: APP_ENCRYPTION_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: "*"
+    disk:
+      name: urbot-data
+      mountPath: /var/data
+      sizeGB: 1
