@@ -197,7 +197,7 @@ async def chat_with_bot(slug: str, payload: ChatRequest, request: Request) -> Ch
     except GroqServiceError as exc:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="Chat service is temporarily unavailable.",
+            detail=str(exc),
         ) from exc
 
     return ChatResponse(reply=reply)

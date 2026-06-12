@@ -101,8 +101,17 @@ async def generate_chat_reply(
         raise GroqServiceError("Unable to reach the chat service.") from exc
 
     if response.status_code >= 400:
-        logger.warning("Groq request returned status %s", response.status_code)
-        raise GroqServiceError("The chat service returned an error.")
+        error_msg = "The chat service returned an error."
+        try:
+            err_json = response.json()
+            if isinstance(err_json, dict) and "error" in err_json:
+                err_detail = err_json["error"]
+                if isinstance(err_detail, dict) and "message" in err_detail:
+                    error_msg = err_detail["message"]
+        except Exception:
+            pass
+        logger.warning("Groq request returned status %s: %s", response.status_code, error_msg)
+        raise GroqServiceError(error_msg)
 
     try:
         payload = response.json()
