@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import { api } from '../api';
 import Button from '../components/Button';
+import { Markdown } from '../components/Markdown';
 
 const MAX_MESSAGE_CHARS = 2000;
 
@@ -202,7 +203,7 @@ function BotChatPage() {
                       <span>{isUser ? 'You' : bot.name}</span>
                       <time dateTime={message.createdAt}>{formatTime(message.createdAt)}</time>
                     </div>
-                    <p>{message.content}</p>
+                    {isUser ? <p>{message.content}</p> : <Markdown content={message.content} />}
                   </div>
                 </article>
               );
